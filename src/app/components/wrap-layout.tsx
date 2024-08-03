@@ -25,6 +25,7 @@ const WrapLayout = ({ children }: any) => {
     const [user, setUser] = useState<any>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isUserLoading, setIsUserLoading] = useState(true);
+    const [isUserLoadingFromLocal, setIsUserLoadingFromLocal] = useState(true);
     const [userName, setUserName] = useState('');
     const [userMobile, setUserMobile] = useState('');
     const [userAddress, setUserAddress] = useState('');
@@ -34,10 +35,7 @@ const WrapLayout = ({ children }: any) => {
         require("bootstrap/dist/js/bootstrap.bundle.min.js");
     }, []);
 
-    // Initialize recaptchaVerifier outside of the component
     let recaptchaVerifier: any = null;
-
-    // Function to initialize recaptchaVerifier
     function initializeRecaptchaVerifier() {
         if (!recaptchaVerifier) {
             recaptchaVerifier = new RecaptchaVerifier(
@@ -56,16 +54,8 @@ const WrapLayout = ({ children }: any) => {
         }
     }
 
-    // Function to handle sign-up process
     function onSignup() {
         setLoading(true);
-
-        // api call to check that the mobile is registered or not 
-        // if registered, password daalne ka option 
-        // then verify password
-
-        // else resume the below work
-
         initializeRecaptchaVerifier();
 
         const formatPh = "+" + ph;
@@ -97,8 +87,6 @@ const WrapLayout = ({ children }: any) => {
                     if (res.user) {
                         localStorage.setItem('accessToken', res.user.accessToken);
                         let decodedToken: any = jwtDecode(res.user.accessToken);
-                        console.log('decodedToken -> ', decodedToken);
-                        console.log('aud_key -> ', aud_key);
                         if (decodedToken.aud === aud_key) {
                             setUser(true);
                             setUserMobile(decodedToken.phone_number ? decodedToken.phone_number : '');
@@ -145,7 +133,7 @@ const WrapLayout = ({ children }: any) => {
     };
 
     useEffect(() => {
-        setIsUserLoading(true);
+        setIsUserLoadingFromLocal(true);
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
             let decodedToken: any = jwtDecode(accessToken);
@@ -157,14 +145,8 @@ const WrapLayout = ({ children }: any) => {
                 setUser(null);
             }
         }
-        setIsUserLoading(false);
+        setIsUserLoadingFromLocal(false);
     }, []);
-
-    // useEffect(() => {
-    //     if (user) {
-
-    //     }
-    // }, [user, isAdmin]);
 
     const onSaveUserDetails = async () => {
         const userDetailsPayload = {
@@ -192,7 +174,7 @@ const WrapLayout = ({ children }: any) => {
             user ?
                 <>
                     {
-                        (isUserLoading || !(userName && userMobile && userAddress)) ?
+                        (isUserLoading || isUserLoadingFromLocal) ?
                             <div style={{ display: 'flex', marginTop: '25%', justifyContent: 'center', alignItems: 'center' }}>
                                 <div className="spinner-grow text-primary" role="status" />
                                 <div className="spinner-grow text-secondary" role="status" />
@@ -202,66 +184,62 @@ const WrapLayout = ({ children }: any) => {
                                 <div className="spinner-grow text-info" role="status" />
                                 <div className="spinner-grow text-dark" role="status" />
                             </div>
-                            : <>{
-                                (userName && userMobile && userAddress && isUserAuthorized) ?
-                                    <>
+                            :
+                            (userName && userMobile && userAddress && isUserAuthorized) ?
+                                <>
+                                    <Toaster toastOptions={{ duration: 4000 }} />
+                                    <Navbar isAdmin={isAdmin} />
+                                    <div style={{ width: '100%' }}>
+                                        {children}
+                                    </div>
+                                </>
+                                :
+                                <section className="bg-emerald-500 flex items-center justify-center h-screen">
+                                    <div>
                                         <Toaster toastOptions={{ duration: 4000 }} />
-                                        <Navbar isAdmin={isAdmin} />
-                                        <div style={{ width: '100%' }}>
-                                            {children}
-                                        </div>
-                                    </>
-                                    :
-                                    <>
-                                        <section className="bg-emerald-500 flex items-center justify-center h-screen">
-                                            <div>
-                                                <Toaster toastOptions={{ duration: 4000 }} />
-                                                <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
-                                                    <h1 className="text-center leading-normal text-white font-medium text-xl mb-6">
-                                                        Please save your Name and Address
-                                                    </h1>
-                                                    <div style={{ marginBottom: '10px', display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold', width: '30%' }}>Name: </div>
-                                                        <input
-                                                            type="text"
-                                                            style={{
-                                                                border: '1px solid black',
-                                                                paddingLeft: '5px',
-                                                                borderRadius: '5px',
-                                                                height: '25px'
-                                                            }}
-                                                            onChange={handleInputNameChange}
-                                                        />
-                                                    </div>
-                                                    <div style={{ marginBottom: '10px', display: 'flex' }}>
-                                                        <div style={{ fontWeight: 'bold', width: '30%' }}>Address: </div>
-                                                        <input
-                                                            type="text"
-                                                            style={{
-                                                                border: '1px solid black',
-                                                                paddingLeft: '5px',
-                                                                borderRadius: '5px',
-                                                                height: '25px'
-                                                            }}
-                                                            onChange={handleInputAddressChange}
-                                                        />
-                                                    </div>
-                                                    <button
-                                                        onClick={onSaveUserDetails}
-                                                        className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
-                                                    >
-                                                        <span>Save Details</span>
-                                                    </button>
-                                                </div>
+                                        <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
+                                            <h1 className="text-center leading-normal text-white font-medium text-xl mb-6">
+                                                Please save your Name and Address
+                                            </h1>
+                                            <div style={{ marginBottom: '10px', display: 'flex' }}>
+                                                <div style={{ fontWeight: 'bold', width: '30%' }}>Name: </div>
+                                                <input
+                                                    type="text"
+                                                    style={{
+                                                        border: '1px solid black',
+                                                        paddingLeft: '5px',
+                                                        borderRadius: '5px',
+                                                        height: '25px'
+                                                    }}
+                                                    onChange={handleInputNameChange}
+                                                />
                                             </div>
-                                        </section>
-                                    </>
-                            }
-                            </>
+                                            <div style={{ marginBottom: '10px', display: 'flex' }}>
+                                                <div style={{ fontWeight: 'bold', width: '30%' }}>Address: </div>
+                                                <input
+                                                    type="text"
+                                                    style={{
+                                                        border: '1px solid black',
+                                                        paddingLeft: '5px',
+                                                        borderRadius: '5px',
+                                                        height: '25px'
+                                                    }}
+                                                    onChange={handleInputAddressChange}
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={onSaveUserDetails}
+                                                className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
+                                            >
+                                                <span>Save Details</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </section>
                     }
                 </>
                 :
-                isUserLoading ?
+                (isUserLoading || isUserLoadingFromLocal) ?
                     <div style={{ display: 'flex', marginTop: '25%', justifyContent: 'center', alignItems: 'center' }}>
                         <div className="spinner-grow text-primary" role="status" />
                         <div className="spinner-grow text-secondary" role="status" />
