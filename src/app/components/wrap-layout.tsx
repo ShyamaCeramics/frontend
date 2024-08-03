@@ -97,6 +97,8 @@ const WrapLayout = ({ children }: any) => {
                     if (res.user) {
                         localStorage.setItem('accessToken', res.user.accessToken);
                         let decodedToken: any = jwtDecode(res.user.accessToken);
+                        console.log('decodedToken -> ', decodedToken);
+                        console.log('aud_key -> ', aud_key);
                         if (decodedToken.aud === aud_key) {
                             setUser(true);
                             setUserMobile(decodedToken.phone_number ? decodedToken.phone_number : '');
