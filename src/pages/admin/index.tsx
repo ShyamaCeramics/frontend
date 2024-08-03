@@ -86,7 +86,7 @@ const AdminDashboard = () => {
         setIsItemsDataLoading(false);
     };
 
-    const apiBaseUrl = "https://shyama-backend.onrender.com"
+    const apiBaseUrl = "https://shyama-app.netlify.app/.netlify/functions/api"
     const imageUrlPath = apiBaseUrl + "/resources/static/assets/uploads/";
 
     return <WrapLayout>

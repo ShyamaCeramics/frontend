@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 const OrderDetails = ({ isLoadingData = true, currentOrderData }: any) => {
-    const apiBaseUrl = "https://shyama-backend.onrender.com"
+    const apiBaseUrl = "https://shyama-app.netlify.app/.netlify/functions/api"
     const imageUrlPath = apiBaseUrl + "/resources/static/assets/uploads/";
 
     const [order, setorder] = useState<any>(currentOrderData);

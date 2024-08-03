@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 
-const apiBaseUrl = 'https://shyama-backend.onrender.com';
+const apiBaseUrl = 'https://shyama-app.netlify.app/.netlify/functions/api';
 
 export const getLoginAuthToken = () => {
     const localAuthToken = localStorage.getItem('accessToken');

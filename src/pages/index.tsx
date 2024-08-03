@@ -77,7 +77,7 @@ const Dashboard = () => {
         require("bootstrap/dist/js/bootstrap.bundle.min.js");
     }, []);
 
-    const apiBaseUrl = "https://shyama-backend.onrender.com"
+    const apiBaseUrl = "https://shyama-app.netlify.app/.netlify/functions/api"
     const imageUrlPath = apiBaseUrl + "/resources/static/assets/uploads/";
 
     const makeOrder = async () => {

@@ -6,7 +6,7 @@ import imag2 from '../../assets/images/items/img2.jpg';
 import imag3 from '../../assets/images/items/img3.jpg';
 
 const ShowItemDetails = ({ currentItem, isLoadingData = true }: any) => {
-    const apiBaseUrl = "https://shyama-backend.onrender.com"
+    const apiBaseUrl = "https://shyama-app.netlify.app/.netlify/functions/api"
     const imageUrlPath = apiBaseUrl + "/resources/static/assets/uploads/";
 
     const [item, setItem] = useState<any>({});
