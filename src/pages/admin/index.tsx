@@ -86,7 +86,7 @@ const AdminDashboard = () => {
         setIsItemsDataLoading(false);
     };
 
-    const apiBaseUrl = "https://shyama-app.netlify.app/.netlify/functions/api"
+    const apiBaseUrl = "https://vercel-only-images.vercel.app"
     const imageUrlPath = apiBaseUrl + "/resources/static/assets/uploads/";
 
     return <WrapLayout>

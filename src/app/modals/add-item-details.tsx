@@ -91,7 +91,7 @@ const AddItemDetails = ({ setIsItemsDataLoading, fetchCurrentCatgoryData }: AddI
         }
 
         setIsItemsDataLoading(true);
-        const apiBaseUrl = 'https://shyama-app.netlify.app/.netlify/functions/api';
+        const apiBaseUrl = 'https://vercel-only-images.vercel.app';
         const url = apiBaseUrl + '/product/upload';
         const formData: any = new FormData();
 
