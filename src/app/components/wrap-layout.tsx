@@ -24,8 +24,8 @@ const WrapLayout = ({ children }: any) => {
     const [showOTP, setShowOTP] = useState(false);
     const [user, setUser] = useState<any>(null);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isUserLoading, setIsUserLoading] = useState(true);
-    const [isUserLoadingFromLocal, setIsUserLoadingFromLocal] = useState(true);
+    const [isUserLoading, setIsUserLoading] = useState(false);
+    const [isUserLoadingFromLocal, setIsUserLoadingFromLocal] = useState(false);
     const [userName, setUserName] = useState('');
     const [userMobile, setUserMobile] = useState('');
     const [userAddress, setUserAddress] = useState('');
