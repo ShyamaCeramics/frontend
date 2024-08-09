@@ -100,6 +100,11 @@ export const callToFetchUserDetails = async () => {
     return data;
 };
 
+export const callToFetchAllUsers = async () => {
+    const data = await getApiCall(`user/all`);
+    return data;
+};
+
 export const callToSaveUserDetails = async (content: any, url: string) => {
     const data = await postApiCall(content, url);
     return data;
